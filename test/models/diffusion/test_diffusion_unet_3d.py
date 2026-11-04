@@ -285,3 +285,52 @@ class TestGradientFlow:
         ]
         assert all(grad is not None for grad in parameter_grads)
         assert all(torch.isfinite(grad).all() for grad in parameter_grads)
+
+
+@pytest.mark.parametrize(
+    "config_name,model_kwargs,x_shape",
+    ARCH_CONFIGS,
+    ids=[config[0] for config in ARCH_CONFIGS],
+)
+@pytest.mark.parametrize("dtype", [torch.bfloat16, torch.float16])
+class TestAutocast:
+    """Tests forward and backward passes under torch.autocast (mixed precision)."""
+
+    def test_forward(self, config_name, model_kwargs, x_shape, device, dtype):
+        model = instantiate_model_deterministic(
+            DiffusionUNet3D, seed=0, **model_kwargs
+        ).to(device)
+        x, t, condition = _generate_batch_data(model_kwargs, x_shape, device)
+        device_type = torch.device(device).type
+
+        with torch.no_grad():
+            ref = model(x, t, condition=condition)
+            with torch.autocast(device_type, dtype=dtype):
+                out = model(x, t, condition=condition)
+
+        assert out.shape == ref.shape
+        assert torch.isfinite(out).all()
+        # Reduced precision perturbs a few elements strongly, so compare the
+        # relative error norm rather than an elementwise tolerance.
+        rel_err = (out.float() - ref).norm() / ref.norm()
+        assert rel_err < 5e-2
+
+    def test_backward(self, config_name, model_kwargs, x_shape, device, dtype):
+        model = instantiate_model_deterministic(
+            DiffusionUNet3D, seed=0, **model_kwargs
+        ).to(device)
+        x, t, condition = _generate_batch_data(model_kwargs, x_shape, device)
+        x.requires_grad_(True)
+        device_type = torch.device(device).type
+
+        with torch.autocast(device_type, dtype=dtype):
+            out = model(x, t, condition=condition)
+        out.float().sum().backward()
+
+        assert x.grad is not None
+        assert torch.isfinite(x.grad).all()
+        assert all(
+            parameter.grad is not None and torch.isfinite(parameter.grad).all()
+            for parameter in model.parameters()
+            if parameter.requires_grad
+        )
