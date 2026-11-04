@@ -392,6 +392,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- The nonlinear shallow water PINO example (`examples/cfd/swe_nonlinear_pino`)
+  no longer returns a NaN PDE loss with `loss.derivative: physicsnemo` and a batch
+  size of 1 or 2. The PDE residuals were sliced along the batch axis instead of
+  the time axis, which also dropped two samples per batch at larger sizes.
 - `physicsnemo.metrics.cae.cfd.compute_tke_spectrum` no longer raises
   `UnboundLocalError` when `length` is passed; the domain length now sets the
   grid spacing used for the wavenumbers.
