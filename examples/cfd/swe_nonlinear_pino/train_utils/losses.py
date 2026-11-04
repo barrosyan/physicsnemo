@@ -294,9 +294,11 @@ def physicsnemo_fdm_swe_nonlin(h, u, v, pde_node, D=1, device=0):
         }
     )
 
-    Dh = pde_Dh["Dh"][1:-1]
-    Du = pde_Du["Du"][1:-1]
-    Dv = pde_Dv["Dv"][1:-1]
+    # Time is already trimmed to the central-difference interior above (dim 1), so the
+    # residuals are returned as-is. Slicing dim 0 here would drop batch samples.
+    Dh = pde_Dh["Dh"]
+    Du = pde_Du["Du"]
+    Dv = pde_Dv["Dv"]
 
     return Dh, Du, Dv
 
