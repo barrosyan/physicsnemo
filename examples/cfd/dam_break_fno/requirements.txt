@@ -1,0 +1,4 @@
+hydra-core>=1.2.0
+h5py>=3.7.0
+scipy>=1.9.0
+matplotlib>=3.5.0

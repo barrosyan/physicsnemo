@@ -1,0 +1,51 @@
+# SPDX-FileCopyrightText: Copyright (c) 2023 - 2026 NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+hydra:
+  job:
+    chdir: true
+  run:
+    dir: ./outputs
+
+data:
+  # Directory with dam_break_{train,validation,test}.h5 written by generate_dataset.py
+  dir: ./data
+
+arch:
+  # Inputs: alpha at t and t - dt, and the obstacle mask
+  in_channels: 3
+  out_channels: 1
+  latent_channels: 32
+  fno_layers: 4
+  fno_modes: 16
+  padding: 8
+  decoder_layers: 1
+  decoder_layer_size: 64
+
+training:
+  batch_size: 16
+  max_epochs: 40
+  # Number of autoregressive steps unrolled per sample during training
+  unroll_steps: 4
+  initial_lr: 1.0e-3
+  weight_decay: 1.0e-5
+  checkpoint_freq: 5
+  validation_freq: 5
+  seed: 0
+
+inference:
+  # Times (s) shown in the rollout figure
+  plot_times: [0.25, 0.5, 0.75, 1.0]

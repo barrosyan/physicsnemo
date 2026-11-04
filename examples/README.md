@@ -43,6 +43,7 @@ The several examples inside PhysicsNeMo can be classified based on their domains
 |[Magnetohydrodynamics using PINO (Data + Physics Driven)*](./cfd/mhd_pino/)|FNO|YES|
 |[Shallow Water Equations using PINO (Data + Physics Driven)*](./cfd/swe_nonlinear_pino/)|FNO|YES|
 |[Shallow Water Equations using Distributed GNNs](./cfd/swe_distributed_gnn/)|GraphCast|YES|
+|[Two-Phase Dam Break (OpenFOAM interFoam data)](./cfd/dam_break_fno/)|FNO|YES|
 |[Vortex Shedding with Temporal Attention](./cfd/vortex_shedding_mesh_reduced/)|MeshGraphNet|YES|
 |[Data Center Airflow](./cfd/datacenter/)|3D UNet|NO|
 |[Fluid Super-resolution*](./cfd/flow_reconstruction_diffusion/)|Denoising Diffusion Probablistic Model|YES|

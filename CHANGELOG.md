@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Adds a two-phase dam break example (`examples/cfd/dam_break_fno`): an
+  OpenFOAM `interFoam` dataset generator for the `damBreak` tutorial with
+  parametric water columns, and an autoregressive FNO trained with unrolled
+  rollouts and evaluated against `interFoam` on held-out cases.
 - `physicsnemo.mesh.sampling.sample_cells_systematic` draws a fixed number of
   a mesh's cells with probability proportional to their measure, with
   Horvitz-Thompson weights for unbiased sums. The sample is spread over the
