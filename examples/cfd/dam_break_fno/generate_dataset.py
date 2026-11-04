@@ -242,6 +242,7 @@ def cell_centres(block_mesh_dict: Path) -> np.ndarray:
 
 
 def main() -> None:
+    """Draw the water columns, run the cases in parallel and write the splits."""
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--num-cases", type=int, default=100)
     parser.add_argument("--output-dir", default="./data")

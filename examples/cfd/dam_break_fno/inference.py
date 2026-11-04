@@ -45,6 +45,7 @@ def wet_iou(prediction: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
 
 @hydra.main(version_base="1.3", config_path=".", config_name="config.yaml")
 def main(cfg: DictConfig) -> None:
+    """Roll the FNO out on the test split and write metrics and figures."""
     device = "cuda" if torch.cuda.is_available() else "cpu"
     test = load_split(to_absolute_path(cfg.data.dir), "test")
     alpha, mask, times = (

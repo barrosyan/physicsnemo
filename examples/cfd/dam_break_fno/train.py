@@ -31,6 +31,7 @@ from utils import DamBreakWindows, build_model, load_split, relative_l2, rollout
 
 @hydra.main(version_base="1.3", config_path=".", config_name="config.yaml")
 def main(cfg: DictConfig) -> None:
+    """Train the FNO with unrolled rollouts and checkpoint it."""
     DistributedManager.initialize()
     dist = DistributedManager()
     device = dist.device
